@@ -6,15 +6,14 @@ from io import BytesIO
 import uuid
 from supabase import create_client
 
-# --- CONEXIÓN A TU BASE DE DATOS ---
-# (Copia estos datos de Supabase > Settings > API)
+# --- CONEXIÓN ---
 URL = "https://acvlmncnfayjrjitmspq.supabase.co"
-KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdmxtbmNuZmF5anJqaXRtc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MDgsImV4cCI6MjA4OTk2MDYwOH0.8wSohRdhtwO3Kg9hr3lLlcLSyfqKL73yk__q7BuHtZo"
+KEY = "TU_ANON_KEY_AQUI" # Asegúrate de que sea tu llave completa
 supabase = create_client(URL, KEY)
 
 app = FastAPI()
 
-# Esto sirve para que tu página web (HTML) se vea bien
+# Montamos la carpeta para el diseño
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
@@ -23,22 +22,21 @@ def home():
 
 @app.get("/generar/{casa}")
 def generar_qr(casa: str):
-    # 1. Creamos un código secreto único (Token)
-    token_secreto = str(uuid.uuid4())[:8].upper()
+    token = str(uuid.uuid4())[:8].upper()
     
-    # 2. Guardamos en la tabla 'accesos' que acabas de crear
-    # Por defecto lo creamos como 'Temporal'
-    nuevo_registro = {
-        "casa": casa, 
-        "token": token_secreto, 
-        "tipo": "Temporal", 
-        "usado": False
-    }
-    supabase.table("accesos").insert(nuevo_registro).execute()
-    
-    # 3. Convertimos ese código secreto en un código QR
-    img = qrcode.make(token_secreto)
+    # Guardamos con todos los campos de tu tabla
+    try:
+        supabase.table("accesos").insert({
+            "casa": casa, 
+            "token": token, 
+            "tipo": "Temporal", 
+            "usado": False
+        }).execute()
+    except Exception as e:
+        print(f"Error en Supabase: {e}")
+
+    img = qrcode.make(token)
     buf = BytesIO()
-    img.save(buf)
+    img.save(buf, format="PNG") # Forzamos formato PNG
     buf.seek(0)
     return Response(content=buf.getvalue(), media_type="image/png")
