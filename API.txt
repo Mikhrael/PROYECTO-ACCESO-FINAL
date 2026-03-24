@@ -1,0 +1,7 @@
+publishable key sb_publishable_XAlz_aFtGGp-06a5VgYKRQ_TKHZwOfg
+
+Secret keys sb_secret_TP1cGmjJASyJFW-Wu0tzPA_RoSvYHX2
+
+Annon public eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdmxtbmNuZmF5anJqaXRtc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MDgsImV4cCI6MjA4OTk2MDYwOH0.8wSohRdhtwO3Kg9hr3lLlcLSyfqKL73yk__q7BuHtZo
+
+API URL https://acvlmncnfayjrjitmspq.supabase.co

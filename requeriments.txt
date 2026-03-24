@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+qrcode
+supabase
+httpx
+python-multipart
