@@ -1,3 +1,4 @@
+from fastapi.responses import StreamingResponse
 from fastapi import FastAPI, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -24,7 +25,7 @@ def home():
 def generar_qr(casa: str):
     token = str(uuid.uuid4())[:8].upper()
     
-    # Guardamos con todos los campos de tu tabla
+    # Guardamos en Supabase
     try:
         supabase.table("accesos").insert({
             "casa": casa, 
@@ -33,7 +34,15 @@ def generar_qr(casa: str):
             "usado": False
         }).execute()
     except Exception as e:
-        print(f"Error en Supabase: {e}")
+        print(f"Error: {e}")
+
+    # Creamos el QR
+    img = qrcode.make(token)
+    buf = BytesIO()
+    img.save(buf, "PNG")
+    buf.seek(0) # Regresamos al inicio del archivo
+    
+    return StreamingResponse(buf, media_type="image/png")
 
     img = qrcode.make(token)
     buf = BytesIO()
