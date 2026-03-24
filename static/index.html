@@ -30,16 +30,16 @@
 
     <script>
         async function pedirQR() {
-            const casa = document.getElementById('casaInput').value;
-            if (!casa) return alert("Por favor, escribe el número de casa");
+    const casa = document.getElementById('casaInput').value;
+    if (!casa) return alert("Por favor, escribe el número de casa");
 
-            const container = document.getElementById('qr-container');
-            container.innerHTML = '<div class="spinner-border text-primary" role="status"></div><p>Generando...</p>';
+    const container = document.getElementById('qr-container');
+    container.innerHTML = '<div class="spinner-border text-primary" role="status"></div>';
 
-            // Esta línea llama a tu servidor de Python (Render)
-            container.innerHTML = `<img src="/generar/${casa}" class="shadow-sm">
-                                   <p class="mt-2 fw-bold text-success">¡Pase generado para Casa ${casa}!</p>`;
-        }
+    // El cambio importante es asegurar que use la ruta /generar/
+    container.innerHTML = `<img src="/generar/${casa}" class="img-fluid shadow-sm" alt="Código QR">
+                           <p class="mt-2 fw-bold text-success">¡Pase generado para Casa ${casa}!</p>`;
+}
     </script>
 </body>
 </html>
