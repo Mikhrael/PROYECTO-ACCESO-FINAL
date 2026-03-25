@@ -3,84 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Acceso - Canteras</title>
+    <title>Acceso Residencial | Canteras</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { background-color: #f4f7f6; }
-        .card { border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .qr-result img { max-width: 200px; border: 5px solid white; border-radius: 10px; }
+        :root {
+            --primary-color: #2563eb;
+            --dark-bg: #0f172a;
+        }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .main-card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header-accent {
+            background: var(--dark-bg);
+            padding: 2rem 1rem;
+            color: white;
+            text-align: center;
+        }
+        .nav-pills .nav-link {
+            color: #64748b;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+        }
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        .btn-generate {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .qr-area {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 15px;
+        }
     </style>
 </head>
-<body class="d-flex align-items-center vh-100">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <div class="card p-4">
-                    <h2 class="text-center mb-4">Acceso Canteras</h2>
-                    
-                    <ul class="nav nav-pills nav-fill mb-3" id="pills-tab">
+<body class="d-flex align-items-center min-vh-100">
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card main-card">
+                <div class="header-accent">
+                    <i class="fa-solid fa-shield-halved fa-3x mb-3"></i>
+                    <h3 class="fw-bold">Residencial Canteras</h3>
+                    <p class="text-white-50 mb-0">Sistema de Acceso Inteligente</p>
+                </div>
+
+                <div class="card-body p-4">
+                    <ul class="nav nav-pills nav-fill mb-4 bg-light p-1 rounded-3" id="pills-tab">
                         <li class="nav-item">
-                            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#vecino">Invitado</button>
+                            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#invitado">
+                                <i class="fa-solid fa-user-clock me-2"></i>Invitado
+                            </button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#admin">Dueño</button>
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#admin">
+                                <i class="fa-solid fa-key me-2"></i>Dueño
+                            </button>
                         </li>
                     </ul>
 
-                    <div class="tab-content mt-3">
-                        <div class="tab-pane fade show active" id="vecino">
-                            <p class="small text-muted text-center">Genera un pase temporal de 1 solo uso.</p>
-                            <input type="text" id="casaV" class="form-control mb-3" placeholder="Número de Casa">
-                            <button onclick="generar(false)" class="btn btn-primary w-100">Generar QR Invitado</button>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="invitado">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Número de Casa</label>
+                                <input type="number" id="casaV" class="form-control" placeholder="Ej: 405">
+                            </div>
+                            <button onclick="generar(false)" class="btn btn-primary btn-generate w-100">
+                                Generar Pase Único
+                            </button>
                         </div>
 
                         <div class="tab-pane fade" id="admin">
-                            <input type="text" id="casaA" class="form-control mb-2" placeholder="Número de Casa">
-                            <select id="tipoA" class="form-select mb-2">
-                                <option value="Permanente">Residente (Permanente)</option>
-                                <option value="Temporal">Temporal (Multi-uso)</option>
-                            </select>
-                            <input type="number" id="usosA" class="form-control mb-2" placeholder="Cant. de usos (ej: 10)" value="1">
-                            <input type="password" id="pinA" class="form-control mb-3" placeholder="PIN de Seguridad">
-                            <button onclick="generar(true)" class="btn btn-dark w-100">Generar QR Maestro</button>
+                            <div class="row g-2">
+                                <div class="col-6 mb-2">
+                                    <label class="form-label small fw-bold">Casa</label>
+                                    <input type="number" id="casaA" class="form-control">
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <label class="form-label small fw-bold">Usos</label>
+                                    <input type="number" id="usosA" class="form-control" value="1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Tipo de Pase</label>
+                                <select id="tipoA" class="form-select">
+                                    <option value="Permanente">Permanente (Residente)</option>
+                                    <option value="Temporal">Temporal (Multi-uso)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">PIN de Seguridad</label>
+                                <input type="password" id="pinA" class="form-control" placeholder="****">
+                            </div>
+                            <button onclick="generar(true)" class="btn btn-dark btn-generate w-100">
+                                Generar QR Administrador
+                            </button>
                         </div>
                     </div>
 
-                    <div id="resultado" class="mt-4 text-center d-none">
-                        <hr>
-                        <div id="qr-img" class="qr-result mb-2"></div>
-                        <p id="qr-msg" class="fw-bold text-success"></p>
-                        <button onclick="window.print()" class="btn btn-sm btn-outline-secondary">Imprimir o Guardar</button>
+                    <div id="resultado" class="mt-4 text-center d-none border-top pt-4">
+                        <div class="qr-area shadow-sm">
+                            <div id="qr-img"></div>
+                        </div>
+                        <p id="qr-msg" class="mt-3 fw-bold text-primary"></p>
+                        <div class="d-grid gap-2">
+                            <button onclick="window.print()" class="btn btn-outline-secondary btn-sm">
+                                <i class="fa-solid fa-print me-2"></i>Imprimir / Guardar
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <p class="text-center mt-4 text-muted small">Desarrollado por Canteras Tech © 2026</p>
         </div>
     </div>
+</div>
 
-    <script>
-        async function generar(isAdmin) {
-            const casa = isAdmin ? document.getElementById('casaA').value : document.getElementById('casaV').value;
-            const tipo = isAdmin ? document.getElementById('tipoA').value : "Temporal";
-            const usos = isAdmin ? document.getElementById('usosA').value : 1;
-            const pin = isAdmin ? document.getElementById('pinA').value : "";
+<script>
+    async function generar(isAdmin) {
+        const casa = isAdmin ? document.getElementById('casaA').value : document.getElementById('casaV').value;
+        const tipo = isAdmin ? document.getElementById('tipoA').value : "Temporal";
+        const usos = isAdmin ? document.getElementById('usosA').value : 1;
+        const pin = isAdmin ? document.getElementById('pinA').value : "";
 
-            if(!casa) return alert("Ingresa la casa");
-            if(isAdmin && !pin) return alert("Ingresa el PIN");
+        if(!casa) return alert("Por favor, ingresa el número de casa.");
+        
+        const resDiv = document.getElementById('resultado');
+        const imgDiv = document.getElementById('qr-img');
+        const msg = document.getElementById('qr-msg');
 
-            const resDiv = document.getElementById('resultado');
-            const imgDiv = document.getElementById('qr-img');
-            const msg = document.getElementById('qr-msg');
+        resDiv.classList.remove('d-none');
+        imgDiv.innerHTML = '<div class="spinner-border text-primary" role="status"></div>';
 
-            resDiv.classList.remove('d-none');
-            imgDiv.innerHTML = "Generando...";
+        let url = `/generar?casa=${casa}&tipo=${tipo}&usos=${usos}`;
+        if(pin) url += `&pin=${pin}`;
 
-            let url = `/generar?casa=${casa}&tipo=${tipo}&usos=${usos}`;
-            if(pin) url += `&pin=${pin}`;
-
-            imgDiv.innerHTML = `<img src="${url}" class="img-fluid">`;
-            msg.innerText = `¡Pase ${tipo} listo para Casa ${casa}!`;
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        // Precarga de imagen para evitar saltos visuales
+        const img = new Image();
+        img.src = url;
+        img.className = "img-fluid";
+        img.onload = () => {
+            imgDiv.innerHTML = "";
+            imgDiv.appendChild(img);
+            msg.innerText = `Pase para Casa ${casa} generado con éxito`;
+        };
+        img.onerror = () => {
+            imgDiv.innerHTML = '<p class="text-danger small">Error: PIN incorrecto o problema de conexión.</p>';
+        };
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
