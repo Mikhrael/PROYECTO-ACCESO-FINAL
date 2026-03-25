@@ -9,7 +9,7 @@ from supabase import create_client
 
 # --- CONEXIÓN ---
 URL = "https://acvlmncnfayjrjitmspq.supabase.co"
-KEY = "TU_ANON_KEY_AQUI" # Asegúrate de que sea tu llave completa
+KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdmxtbmNuZmF5anJqaXRtc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MDgsImV4cCI6MjA4OTk2MDYwOH0.8wSohRdhtwO3Kg9hr3lLlcLSyfqKL73yk__q7BuHtZo" # Asegúrate de que sea tu llave completa
 supabase = create_client(URL, KEY)
 
 app = FastAPI()

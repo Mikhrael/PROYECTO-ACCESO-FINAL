@@ -4,3 +4,4 @@ qrcode
 supabase
 httpx
 python-multipart
+Pillow
