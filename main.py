@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from fastapi import FastAPI, Response, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
@@ -27,6 +28,21 @@ def generar_qr(
 ):
     # SEGURIDAD: Solo el dueño puede crear pases Permanentes o de muchos usos
     PIN_MAESTRO = "2306"  # <--- CAMBIA TU CONTRASEÑA AQUÍ
+
+# Calculamos la expiración (24 horas para temporales, 10 años para permanentes)
+    horas = 24 if tipo == "Temporal" else 87600 
+    expiracion = datetime.utcnow() + timedelta(hours=horas)
+
+    try:
+        supabase.table("accesos").insert({
+            "casa": casa, 
+            "token": token, 
+            "tipo": tipo, 
+            "usos_permitidos": usos,
+            "usos_restantes": usos,
+            "expira_at": expiracion.isoformat(), # <--- Nueva columna
+            "usado": False
+        }).execute()
     
     if tipo == "Permanente" or usos > 1:
         if pin != PIN_MAESTRO:
