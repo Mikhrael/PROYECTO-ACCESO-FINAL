@@ -26,6 +26,13 @@ def generar_qr(
     usos: int = 1, 
     pin: str = None
 ):
+    # --- AQUÍ VA LA LIMPIEZA ---
+    try:
+        # Borra los temporales que ya pasaron de su fecha de expiración
+        supabase.table("accesos").delete().lt("expira_at", datetime.utcnow().isoformat()).eq("tipo", "Temporal").execute()
+    except Exception as e:
+        print(f"Error en limpieza: {e}") # Si falla la limpieza, que siga con lo demás
+    # ---------------------------
     # 1. SEGURIDAD: Validar primero si tiene permiso
     PIN_MAESTRO = "2306" 
     
