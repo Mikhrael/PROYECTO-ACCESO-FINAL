@@ -26,7 +26,7 @@ def generar_qr(
     pin: str = None
 ):
     # SEGURIDAD: Solo el dueño puede crear pases Permanentes o de muchos usos
-    PIN_MAESTRO = "2026"  # <--- CAMBIA TU CONTRASEÑA AQUÍ
+    PIN_MAESTRO = "2306"  # <--- CAMBIA TU CONTRASEÑA AQUÍ
     
     if tipo == "Permanente" or usos > 1:
         if pin != PIN_MAESTRO:
