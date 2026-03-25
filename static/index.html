@@ -3,43 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Residencial</title>
+    <title>Control de Acceso - Canteras</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .card { border-radius: 15px; margin-top: 50px; }
-        #qr-container img { max-width: 100%; border: 5px solid white; border-radius: 10px; }
+        body { background-color: #f4f7f6; }
+        .card { border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .qr-result img { max-width: 200px; border: 5px solid white; border-radius: 10px; }
     </style>
 </head>
-<body>
-    <div class="container text-center">
-        <div class="card shadow p-4 mx-auto" style="max-width: 400px;">
-            <h2 class="mb-4">Generar Pase</h2>
-            <p class="text-muted">Ingresa el número de tu casa</p>
-            
-            <input type="text" id="casaInput" class="form-control form-control-lg mb-3 text-center" placeholder="Ej: 48">
-            
-            <button onclick="pedirQR()" class="btn btn-primary btn-lg w-100">
-                Crear Código QR
-            </button>
+<body class="d-flex align-items-center vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card p-4">
+                    <h2 class="text-center mb-4">Acceso Canteras</h2>
+                    
+                    <ul class="nav nav-pills nav-fill mb-3" id="pills-tab">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#vecino">Invitado</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#admin">Dueño</button>
+                        </li>
+                    </ul>
 
-            <div id="qr-container" class="mt-4">
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane fade show active" id="vecino">
+                            <p class="small text-muted text-center">Genera un pase temporal de 1 solo uso.</p>
+                            <input type="text" id="casaV" class="form-control mb-3" placeholder="Número de Casa">
+                            <button onclick="generar(false)" class="btn btn-primary w-100">Generar QR Invitado</button>
+                        </div>
+
+                        <div class="tab-pane fade" id="admin">
+                            <input type="text" id="casaA" class="form-control mb-2" placeholder="Número de Casa">
+                            <select id="tipoA" class="form-select mb-2">
+                                <option value="Permanente">Residente (Permanente)</option>
+                                <option value="Temporal">Temporal (Multi-uso)</option>
+                            </select>
+                            <input type="number" id="usosA" class="form-control mb-2" placeholder="Cant. de usos (ej: 10)" value="1">
+                            <input type="password" id="pinA" class="form-control mb-3" placeholder="PIN de Seguridad">
+                            <button onclick="generar(true)" class="btn btn-dark w-100">Generar QR Maestro</button>
+                        </div>
+                    </div>
+
+                    <div id="resultado" class="mt-4 text-center d-none">
+                        <hr>
+                        <div id="qr-img" class="qr-result mb-2"></div>
+                        <p id="qr-msg" class="fw-bold text-success"></p>
+                        <button onclick="window.print()" class="btn btn-sm btn-outline-secondary">Imprimir o Guardar</button>
+                    </div>
                 </div>
+            </div>
         </div>
     </div>
 
     <script>
-        async function pedirQR() {
-    const casa = document.getElementById('casaInput').value;
-    if (!casa) return alert("Por favor, escribe el número de casa");
+        async function generar(isAdmin) {
+            const casa = isAdmin ? document.getElementById('casaA').value : document.getElementById('casaV').value;
+            const tipo = isAdmin ? document.getElementById('tipoA').value : "Temporal";
+            const usos = isAdmin ? document.getElementById('usosA').value : 1;
+            const pin = isAdmin ? document.getElementById('pinA').value : "";
 
-    const container = document.getElementById('qr-container');
-    container.innerHTML = '<div class="spinner-border text-primary" role="status"></div>';
+            if(!casa) return alert("Ingresa la casa");
+            if(isAdmin && !pin) return alert("Ingresa el PIN");
 
-    // El cambio importante es asegurar que use la ruta /generar/
-    container.innerHTML = `<img src="/generar/${casa}" class="img-fluid shadow-sm" alt="Código QR">
-                           <p class="mt-2 fw-bold text-success">¡Pase generado para Casa ${casa}!</p>`;
-}
+            const resDiv = document.getElementById('resultado');
+            const imgDiv = document.getElementById('qr-img');
+            const msg = document.getElementById('qr-msg');
+
+            resDiv.classList.remove('d-none');
+            imgDiv.innerHTML = "Generando...";
+
+            let url = `/generar?casa=${casa}&tipo=${tipo}&usos=${usos}`;
+            if(pin) url += `&pin=${pin}`;
+
+            imgDiv.innerHTML = `<img src="${url}" class="img-fluid">`;
+            msg.innerText = `¡Pase ${tipo} listo para Casa ${casa}!`;
+        }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
