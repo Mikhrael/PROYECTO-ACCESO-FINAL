@@ -9,52 +9,45 @@
     <style>
         /* --- ESTILOS BASE LUXURY (NEGRO & ORO) --- */
         :root {
-            /* Colores */
-            --bg-dark: #121212; /* Negro profundo para la sección superior */
-            --bg-gold-metal: #a68b55; /* Base metal dorado cepillado */
-            --text-gold-light: #f4d081; /* Texto dorado brillante */
-            --text-gold-dark: #8c7340; /* Texto dorado oscuro para detalles */
-            
-            /* Degradados y Efectos */
-            --gold-gradient: linear-gradient(135deg, #f4d081 0%, #c29d50 50%, #8c7340 100%); /* Degradado metal cepillado */
-            
-            /* Sombras Luxury - Cruciales para el relieve */
-            --shadow-metal-raised: 8px 8px 16px rgba(0,0,0,0.6), -8px -8px 16px rgba(255,255,255,0.05); /* Tarjeta flotante */
-            --shadow-metal-in: inset 3px 3px 6px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.05); /* Hundimiento metal */
-            --shadow-gold-text: 1px 1px 3px rgba(0,0,0,0.8); /* Brillo texto oro */
+            --bg-dark: #121212;
+            --bg-gold-metal: #a68b55;
+            --text-gold-light: #f4d081;
+            --text-gold-dark: #8c7340;
+            --gold-gradient: linear-gradient(135deg, #f4d081 0%, #c29d50 50%, #8c7340 100%);
+            --shadow-metal-raised: 8px 8px 16px rgba(0,0,0,0.6), -8px -8px 16px rgba(255,255,255,0.05);
+            --shadow-metal-in: inset 3px 3px 6px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.05);
+            --shadow-gold-text: 1px 1px 3px rgba(0,0,0,0.8);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         
         body {
-            font-family: 'Inter', 'Segoe UI', sans-serif; /* Tipografía limpia y moderna */
-            background-color: #000000; /* Fondo de la página totalmente negro */
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: #000000;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-vh-100;
+            min-height: 100vh;
             padding: 20px;
         }
 
-        /* --- TARJETA PRINCIPAL LUXURY --- */
         .luxury-card {
-            background-color: var(--bg-gold-metal); /* Base metal cepillado */
-            background-image: var(--gold-gradient); /* Textura metal cepillado */
+            background-color: var(--bg-gold-metal);
+            background-image: var(--gold-gradient);
             width: 100%;
             max-width: 400px;
             border-radius: 40px;
             box-shadow: var(--shadow-metal-raised);
-            overflow: hidden; /* Mantiene el borde redondeado */
+            overflow: hidden;
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* --- SECCIÓN SUPERIOR NEGRA (CUERO) --- */
         .header-section {
-            background-color: var(--bg-dark); /* Negro cuero */
-            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); /* Sutil textura cuero */
+            background-color: var(--bg-dark);
+            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
             padding: 50px 30px;
             text-align: center;
-            border-bottom: 2px solid var(--text-gold-dark); /* Línea divisoria */
+            border-bottom: 2px solid var(--text-gold-dark);
         }
 
         .header-logo {
@@ -81,15 +74,13 @@
             opacity: 0.9;
         }
 
-        /* --- SECCIÓN INFERIOR DORADA (METAL CEPILLADO) --- */
         .form-section {
             padding: 40px 30px;
         }
 
-        /* --- PESTAÑAS (Invitado / Dueño) --- */
         .pills-container {
             display: flex;
-            background-color: rgba(0,0,0,0.1); /* Sutil fondo hundido */
+            background-color: rgba(0,0,0,0.1);
             box-shadow: var(--shadow-metal-in);
             border-radius: 20px;
             padding: 5px;
@@ -110,17 +101,16 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .pill-button.active {
             color: var(--text-gold-light);
-            background-color: rgba(0,0,0,0.7); /* Hundimiento negro profundo */
+            background-color: rgba(0,0,0,0.7);
             box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
             border: 1px solid var(--text-gold-dark);
         }
 
-        /* --- FORMULARIO HUNDIDO EN METAL --- */
         .form-label {
             display: block;
             text-align: left;
@@ -142,17 +132,16 @@
             color: var(--text-gold-light);
             font-size: 16px;
             margin-bottom: 25px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: inherit;
         }
 
         .luxury-input::placeholder {
             color: rgba(244, 208, 129, 0.5);
         }
 
-        /* --- BOTÓN DE ACCIÓN (NEGRO SOBRE ORO) --- */
         .btn-luxury {
             width: 100%;
-            background-color: #000000; /* Negro profundo */
+            background-color: #000000;
             border: 2px solid var(--text-gold-dark);
             color: var(--text-gold-light);
             padding: 20px;
@@ -171,7 +160,6 @@
             transform: translateY(1px);
         }
 
-        /* --- ÁREA DE RESULTADO QR --- */
         #resultado {
             margin-top: 35px;
             border-top: 2px solid var(--text-gold-dark);
@@ -181,7 +169,7 @@
 
         .qr-frame {
             display: inline-block;
-            background-color: white; /* El QR necesita fondo blanco */
+            background-color: white;
             padding: 20px;
             border-radius: 25px;
             box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
@@ -197,7 +185,6 @@
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
     </style>
 </head>
 <body>
@@ -214,30 +201,30 @@
     <div class="form-section">
         <div class="pills-container">
             <button class="pill-button active" onclick="switchTab('invitado')">
-                <i class="fa-solid fa-user-clock"></i> Invitado
+                <i class="fa-solid fa-user-clock"></i> Pase Invitado
             </button>
             <button class="pill-button" onclick="switchTab('admin')">
-                <i class="fa-solid fa-key"></i> Dueño
+                <i class="fa-solid fa-user-shield"></i> Administrador
             </button>
         </div>
 
         <div class="tab-content active" id="tab-invitado">
-            <label class="form-label">Número de Casa</label>
-            <input type="number" id="casaV" class="luxury-input" placeholder="Ej: 405">
-            <button onclick="generar(false)" class="btn-luxury">Generar Pase Único</button>
+            <label class="form-label">Identificación del Pase</label>
+            <input type="text" id="casaV" class="luxury-input" placeholder="Nombre del QR (Ej: Visita 405)">
+            <button onclick="generar(false)" class="btn-luxury">Generar Pase (2 Usos)</button>
         </div>
 
         <div class="tab-content" id="tab-admin">
-            <label class="form-label">Casa</label>
-            <input type="number" id="casaA" class="luxury-input">
-            <label class="form-label">Usos</label>
+            <label class="form-label">Identificación / Casa</label>
+            <input type="text" id="casaA" class="luxury-input" placeholder="Ej: Administrador">
+            <label class="form-label">Cantidad de Usos</label>
             <input type="number" id="usosA" class="luxury-input" value="1">
-            <label class="form-label">Tipo</label>
-            <select id="tipoA" class="luxury-input">
-                <option value="Permanente">Permanente (Residente)</option>
+            <label class="form-label">Tipo de Acceso</label>
+            <select id="tipoA" class="luxury-input" style="background-color: #121212;">
+                <option value="Permanente">Residente (Permanente)</option>
                 <option value="Temporal">Temporal (Multi-uso)</option>
             </select>
-            <label class="form-label">PIN</label>
+            <label class="form-label">PIN de Seguridad</label>
             <input type="password" id="pinA" class="luxury-input" placeholder="****">
             <button onclick="generar(true)" class="btn-luxury">Generar Maestro</button>
         </div>
@@ -255,24 +242,24 @@
 </div>
 
 <script>
-    // Lógica para cambiar de pestaña luxury
     function switchTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.pill-button').forEach(el => el.classList.remove('active'));
-        
         document.getElementById(`tab-${tabName}`).classList.add('active');
         event.currentTarget.classList.add('active');
-        document.getElementById('resultado').style.display = 'none'; // Limpia el QR al cambiar
+        document.getElementById('resultado').style.display = 'none';
     }
 
-    // Lógica de generación (mismo principio técnico)
     async function generar(isAdmin) {
         const casa = isAdmin ? document.getElementById('casaA').value : document.getElementById('casaV').value;
         const tipo = isAdmin ? document.getElementById('tipoA').value : "Temporal";
-        const usos = isAdmin ? document.getElementById('usosA').value : 1;
+        
+        // Cambio clave: Si es invitado, fuerza 2 usos (entrada/salida). Si es admin, usa el valor del input.
+        const usos = isAdmin ? document.getElementById('usosA').value : 2;
+        
         const pin = isAdmin ? document.getElementById('pinA').value : "";
 
-        if(!casa) return alert("Por favor, ingresa el número de casa.");
+        if(!casa) return alert("Por favor, ingresa una identificación para el QR.");
         
         const resDiv = document.getElementById('resultado');
         const imgDiv = document.getElementById('qr-img');
@@ -281,7 +268,7 @@
         resDiv.style.display = 'block';
         imgDiv.innerHTML = '<div style="color:#f4d081; font-weight:600;">Cifrando pase...</div>';
 
-        let url = `/generar?casa=${casa}&tipo=${tipo}&usos=${usos}`;
+        let url = `/generar?casa=${encodeURIComponent(casa)}&tipo=${tipo}&usos=${usos}`;
         if(pin) url += `&pin=${pin}`;
 
         const img = new Image();
@@ -290,10 +277,10 @@
         img.onload = () => {
             imgDiv.innerHTML = "";
             imgDiv.appendChild(img);
-            msg.innerText = `Pase VIP generado con éxito`;
+            msg.innerText = isAdmin ? "Pase de Administrador Creado" : "Pase de Invitado Creado (2 Usos)";
         };
         img.onerror = () => {
-            imgDiv.innerHTML = '<p style="color:red; font-size:12px; font-weight:600;">Error: PIN incorrecto o problema de conexión.</p>';
+            imgDiv.innerHTML = '<p style="color:#ff4444; font-size:12px; font-weight:600;">Error: PIN incorrecto o problema de red.</p>';
             msg.innerText = "";
         };
     }
