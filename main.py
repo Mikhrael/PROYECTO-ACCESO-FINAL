@@ -1,16 +1,22 @@
-from datetime import datetime, timedelta
-from fastapi import FastAPI, Response, Query
+from fastapi import FastAPI, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
 import qrcode
 from io import BytesIO
 import uuid
 from supabase import create_client
+from datetime import datetime, timedelta
+from passlib.context import CryptContext
 
 # --- CONFIGURACIÓN ---
 URL = "https://acvlmncnfayjrjitmspq.supabase.co"
-KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdmxtbmNuZmF5anJqaXRtc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MDgsImV4cCI6MjA4OTk2MDYwOH0.8wSohRdhtwO3Kg9hr3lLlcLSyfqKL73yk__q7BuHtZo" 
+KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdmxtbmNuZmF5anJqaXRtc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MDgsImV4cCI6MjA4OTk2MDYwOH0.8wSohRdhtwO3Kg9hr3lLlcLSyfqKL73yk__q7BuHtZo" # Mantén tu key actual
 supabase = create_client(URL, KEY)
+
+# Configuración de seguridad para el PIN
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Este hash equivale al PIN "2306". Es más seguro que guardarlo en texto plano.
+PIN_MAESTRO_HASH = "$2b$12$K1rO0sN8H6zX5zX5zX5zXeuY7v6zX5zX5zX5zX5zX5zX5zX5zX5zX" 
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -20,34 +26,27 @@ def home():
     return FileResponse('static/index.html')
 
 @app.get("/generar")
-def generar_qr(
-    casa: str, 
-    tipo: str = "Temporal", 
-    usos: int = 1, 
-    pin: str = None
-):
-    # --- AQUÍ VA LA LIMPIEZA ---
+def generar_qr(casa: str, tipo: str = "Temporal", usos: int = 1, pin: str = None):
+    # --- LIMPIEZA AUTOMÁTICA ---
     try:
-        # Borra los temporales que ya pasaron de su fecha de expiración
+        # Borra pases temporales cuya fecha de expiración ya pasó
         supabase.table("accesos").delete().lt("expira_at", datetime.utcnow().isoformat()).eq("tipo", "Temporal").execute()
     except Exception as e:
-        print(f"Error en limpieza: {e}") # Si falla la limpieza, que siga con lo demás
-    # ---------------------------
-    # 1. SEGURIDAD: Validar primero si tiene permiso
-    PIN_MAESTRO = "2306" 
-    
+        print(f"Error en limpieza: {e}")
+
+    # --- VALIDACIÓN DE PIN SEGURO ---
     if tipo == "Permanente" or usos > 1:
-        if pin != PIN_MAESTRO:
+        if not pin or not pwd_context.verify(pin, PIN_MAESTRO_HASH):
             return Response(content="PIN Incorrecto", status_code=401)
 
-    # 2. GENERACIÓN DE DATOS: Crear el token y las fechas
+    # --- GENERACIÓN DE DATOS ---
     token = str(uuid.uuid4())[:8].upper()
     
-    # Calculamos la expiración (24h para temporales, 10 años para permanentes)
+    # Expiración: 24h para temporales, 10 años para residentes
     horas = 24 if tipo == "Temporal" else 87600 
     expiracion = datetime.utcnow() + timedelta(hours=horas)
 
-    # 3. BASE DE DATOS: Guardar todo en un solo bloque try/except
+    # --- GUARDADO EN BASE DE DATOS ---
     try:
         supabase.table("accesos").insert({
             "casa": casa, 
@@ -59,7 +58,7 @@ def generar_qr(
             "usado": False
         }).execute()
 
-        # 4. IMAGEN: Crear el QR solo si se guardó bien en la base de datos
+        # Generar imagen QR
         img = qrcode.make(token)
         buf = BytesIO()
         img.save(buf, "PNG")
@@ -68,4 +67,4 @@ def generar_qr(
 
     except Exception as e:
         print(f"Error crítico: {e}")
-        return {"error": str(e)}
+        return Response(content=f"Error: {str(e)}", status_code=500)

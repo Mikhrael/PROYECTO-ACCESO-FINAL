@@ -183,6 +183,32 @@
             text-shadow: var(--shadow-gold-text);
         }
 
+        /* Contenedor para los botones de acción final */
+        .actions-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-secondary-luxury {
+            background-color: transparent;
+            border: 2px solid var(--text-gold-dark);
+            color: var(--text-gold-light);
+            padding: 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+            min-width: 140px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary-luxury:hover {
+            background-color: rgba(0,0,0,0.3);
+        }
+
         .tab-content { display: none; }
         .tab-content.active { display: block; }
     </style>
@@ -220,7 +246,7 @@
             <label class="form-label">Cantidad de Usos</label>
             <input type="number" id="usosA" class="luxury-input" value="1">
             <label class="form-label">Tipo de Acceso</label>
-            <select id="tipoA" class="luxury-input" style="background-color: #121212;">
+            <select id="tipoA" class="luxury-input" style="background-color: #121212; color: #f4d081;">
                 <option value="Permanente">Residente (Permanente)</option>
                 <option value="Temporal">Temporal (Multi-uso)</option>
             </select>
@@ -234,9 +260,15 @@
                 <div id="qr-img"></div>
             </div>
             <p id="qr-msg"></p>
-            <button onclick="window.print()" class="btn-luxury" style="font-size: 14px; padding: 15px; max-width: 250px;">
-                <i class="fa-solid fa-print"></i> Guardar o Imprimir
-            </button>
+            
+            <div class="actions-container">
+                <button onclick="window.print()" class="btn-luxury" style="margin-top: 0; padding: 15px; font-size: 14px; flex: 1;">
+                    <i class="fa-solid fa-print"></i> Imprimir
+                </button>
+                <button onclick="nuevaVisita()" class="btn-secondary-luxury">
+                    <i class="fa-solid fa-plus-circle"></i> Nueva Visita
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -250,13 +282,20 @@
         document.getElementById('resultado').style.display = 'none';
     }
 
+    // FUNCIÓN PARA LIMPIAR TODO Y REGRESAR AL INICIO
+    function nuevaVisita() {
+        document.getElementById('resultado').style.display = 'none';
+        document.getElementById('casaV').value = '';
+        document.getElementById('casaA').value = '';
+        document.getElementById('pinA').value = '';
+        document.getElementById('usosA').value = '1';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     async function generar(isAdmin) {
         const casa = isAdmin ? document.getElementById('casaA').value : document.getElementById('casaV').value;
         const tipo = isAdmin ? document.getElementById('tipoA').value : "Temporal";
-        
-        // Cambio clave: Si es invitado, fuerza 2 usos (entrada/salida). Si es admin, usa el valor del input.
         const usos = isAdmin ? document.getElementById('usosA').value : 2;
-        
         const pin = isAdmin ? document.getElementById('pinA').value : "";
 
         if(!casa) return alert("Por favor, ingresa una identificación para el QR.");
@@ -277,7 +316,9 @@
         img.onload = () => {
             imgDiv.innerHTML = "";
             imgDiv.appendChild(img);
-            msg.innerText = isAdmin ? "Pase de Administrador Creado" : "Pase de Invitado Creado (2 Usos)";
+            msg.innerText = isAdmin ? "Pase Maestro Generado" : "Pase de Invitado (2 Usos) Generado";
+            // Scroll automático para ver el QR generado
+            resDiv.scrollIntoView({ behavior: 'smooth' });
         };
         img.onerror = () => {
             imgDiv.innerHTML = '<p style="color:#ff4444; font-size:12px; font-weight:600;">Error: PIN incorrecto o problema de red.</p>';
