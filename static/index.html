@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Canteras | Lujo y Seguridad</title>
+    <title>Acceso VIP Canteras | Elegancia y Seguridad</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- ESTILOS NEUMÓRFICOS BASE --- */
+        /* --- ESTILOS BASE LUXURY (NEGRO & ORO) --- */
         :root {
-            --bg-color: #e0e5ec; /* Fondo gris muy claro, clave para el efecto */
-            --text-color: #37474f;
-            --gold-color: #d4af37; /* Tono dorado elegante */
-            --gold-gradient: linear-gradient(145deg, #f0d58a, #c19b2a); /* Degradado dorado */
+            /* Colores */
+            --bg-dark: #121212; /* Negro profundo para la sección superior */
+            --bg-gold-metal: #a68b55; /* Base metal dorado cepillado */
+            --text-gold-light: #f4d081; /* Texto dorado brillante */
+            --text-gold-dark: #8c7340; /* Texto dorado oscuro para detalles */
             
-            /* Sombras clave para el Neumorfismo */
-            --shadow-out: 6px 6px 12px #a3b1c6, -6px -6px 12px #ffffff;
-            --shadow-in: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
-            --shadow-gold-text: 1px 1px 2px rgba(0,0,0,0.3);
+            /* Degradados y Efectos */
+            --gold-gradient: linear-gradient(135deg, #f4d081 0%, #c29d50 50%, #8c7340 100%); /* Degradado metal cepillado */
+            
+            /* Sombras Luxury - Cruciales para el relieve */
+            --shadow-metal-raised: 8px 8px 16px rgba(0,0,0,0.6), -8px -8px 16px rgba(255,255,255,0.05); /* Tarjeta flotante */
+            --shadow-metal-in: inset 3px 3px 6px rgba(0,0,0,0.4), inset -3px -3px 6px rgba(255,255,255,0.05); /* Hundimiento metal */
+            --shadow-gold-text: 1px 1px 3px rgba(0,0,0,0.8); /* Brillo texto oro */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Inter', 'Segoe UI', sans-serif; /* Tipografía limpia y moderna */
+            background-color: #000000; /* Fondo de la página totalmente negro */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,147 +36,162 @@
             padding: 20px;
         }
 
-        /* --- CONTENEDOR PRINCIPAL --- */
-        .neumorphic-card {
-            background-color: var(--bg-color);
+        /* --- TARJETA PRINCIPAL LUXURY --- */
+        .luxury-card {
+            background-color: var(--bg-gold-metal); /* Base metal cepillado */
+            background-image: var(--gold-gradient); /* Textura metal cepillado */
             width: 100%;
             max-width: 400px;
-            border-radius: 30px;
-            box-shadow: var(--shadow-out);
-            padding: 30px;
+            border-radius: 40px;
+            box-shadow: var(--shadow-metal-raised);
+            overflow: hidden; /* Mantiene el borde redondeado */
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- SECCIÓN SUPERIOR NEGRA (CUERO) --- */
+        .header-section {
+            background-color: var(--bg-dark); /* Negro cuero */
+            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); /* Sutil textura cuero */
+            padding: 50px 30px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 2px solid var(--text-gold-dark); /* Línea divisoria */
         }
 
-        /* --- LOGO Y TÍTULOS ORO --- */
         .header-logo {
-            color: var(--gold-color);
-            font-size: 60px;
-            margin-bottom: 20px;
-            text-shadow: var(--shadow-gold-text);
+            color: var(--text-gold-light);
+            font-size: 70px;
+            margin-bottom: 25px;
+            filter: drop-shadow(0 0 5px rgba(244, 208, 129, 0.4));
         }
 
-        .title-gold {
-            color: var(--gold-color);
+        .title-gold-raised {
+            color: var(--text-gold-light);
             font-weight: 700;
-            font-size: 24px;
+            font-size: 26px;
             text-shadow: var(--shadow-gold-text);
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
         }
 
-        .subtitle-gold {
-            color: var(--gold-color);
+        .subtitle-gold-soft {
+            color: var(--text-gold-dark);
             font-weight: 400;
             font-size: 16px;
-            opacity: 0.9;
             text-shadow: var(--shadow-gold-text);
-            margin-bottom: 30px;
-            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        /* --- SECCIÓN INFERIOR DORADA (METAL CEPILLADO) --- */
+        .form-section {
+            padding: 40px 30px;
         }
 
         /* --- PESTAÑAS (Invitado / Dueño) --- */
         .pills-container {
             display: flex;
-            background-color: var(--bg-color);
-            box-shadow: var(--shadow-in);
-            border-radius: 15px;
+            background-color: rgba(0,0,0,0.1); /* Sutil fondo hundido */
+            box-shadow: var(--shadow-metal-in);
+            border-radius: 20px;
             padding: 5px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .pill-button {
             flex: 1;
             background: none;
             border: none;
-            color: #78909c;
-            padding: 12px;
+            color: var(--text-gold-dark);
+            padding: 15px;
             font-weight: 600;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            font-size: 16px;
         }
 
         .pill-button.active {
-            color: var(--gold-color);
-            background-color: var(--bg-color);
-            box-shadow: var(--shadow-out);
+            color: var(--text-gold-light);
+            background-color: rgba(0,0,0,0.7); /* Hundimiento negro profundo */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            border: 1px solid var(--text-gold-dark);
         }
 
-        /* --- FORMULARIO 'HUNDIDO' --- */
+        /* --- FORMULARIO HUNDIDO EN METAL --- */
         .form-label {
             display: block;
             text-align: left;
-            color: var(--gold-color);
+            color: var(--text-gold-dark);
             font-weight: 600;
             font-size: 14px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             padding-left: 15px;
-            text-shadow: var(--shadow-gold-text);
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.1);
         }
 
-        .neumorphic-input {
+        .luxury-input {
             width: 100%;
-            background-color: var(--bg-color);
-            border: none;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: var(--shadow-in);
-            color: var(--gold-color);
-            font-size: 16px;
-            margin-bottom: 20px;
-        }
-
-        .neumorphic-input::placeholder {
-            color: rgba(212, 175, 55, 0.6);
-        }
-
-        /* --- BOTÓN 'RELIEVE ORO' --- */
-        .btn-gold {
-            width: 100%;
-            background: var(--gold-gradient);
-            border: none;
-            color: white;
+            background-color: transparent;
+            border: 1px solid var(--text-gold-dark);
             padding: 18px;
+            border-radius: 18px;
+            box-shadow: var(--shadow-metal-in);
+            color: var(--text-gold-light);
+            font-size: 16px;
+            margin-bottom: 25px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .luxury-input::placeholder {
+            color: rgba(244, 208, 129, 0.5);
+        }
+
+        /* --- BOTÓN DE ACCIÓN (NEGRO SOBRE ORO) --- */
+        .btn-luxury {
+            width: 100%;
+            background-color: #000000; /* Negro profundo */
+            border: 2px solid var(--text-gold-dark);
+            color: var(--text-gold-light);
+            padding: 20px;
             border-radius: 20px;
             font-weight: 700;
             font-size: 18px;
             cursor: pointer;
-            box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
             transition: all 0.2s ease;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-            margin-top: 10px;
+            margin-top: 15px;
+            box-shadow: var(--shadow-metal-raised);
         }
 
-        .btn-gold:active {
-            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3);
+        .btn-luxury:active {
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.6);
             transform: translateY(1px);
         }
 
         /* --- ÁREA DE RESULTADO QR --- */
         #resultado {
-            margin-top: 30px;
-            border-top: 2px solid rgba(212, 175, 55, 0.2);
-            padding-top: 20px;
+            margin-top: 35px;
+            border-top: 2px solid var(--text-gold-dark);
+            padding-top: 25px;
+            text-align: center;
         }
 
         .qr-frame {
             display: inline-block;
-            background-color: var(--bg-color);
-            padding: 15px;
-            border-radius: 20px;
-            box-shadow: var(--shadow-out);
-            margin-bottom: 15px;
+            background-color: white; /* El QR necesita fondo blanco */
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
         }
 
         #qr-msg {
-            color: var(--gold-color);
+            color: var(--text-gold-light);
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-shadow: var(--shadow-gold-text);
         }
 
@@ -184,56 +202,60 @@
 </head>
 <body>
 
-<div class="neumorphic-card">
-    <div class="header-logo">
-        <i class="fa-solid fa-shield-halved"></i>
-    </div>
-    <h1 class="title-gold">Residencial Canteras</h1>
-    <p class="subtitle-gold">Sistema de Acceso Inteligente</p>
-
-    <div class="pills-container">
-        <button class="pill-button active" onclick="switchTab('invitado')">
-            <i class="fa-solid fa-user-clock"></i> Invitado
-        </button>
-        <button class="pill-button" onclick="switchTab('admin')">
-            <i class="fa-solid fa-key"></i> Dueño
-        </button>
-    </div>
-
-    <div class="tab-content active" id="tab-invitado">
-        <label class="form-label">Número de Casa</label>
-        <input type="number" id="casaV" class="neumorphic-input" placeholder="Ej: 405">
-        <button onclick="generar(false)" class="btn-gold">Generar Pase Único</button>
-    </div>
-
-    <div class="tab-content" id="tab-admin">
-        <label class="form-label">Casa</label>
-        <input type="number" id="casaA" class="neumorphic-input">
-        <label class="form-label">Usos</label>
-        <input type="number" id="usosA" class="neumorphic-input" value="1">
-        <label class="form-label">Tipo</label>
-        <select id="tipoA" class="neumorphic-input">
-            <option value="Permanente">Permanente</option>
-            <option value="Temporal">Temporal</option>
-        </select>
-        <label class="form-label">PIN</label>
-        <input type="password" id="pinA" class="neumorphic-input" placeholder="****">
-        <button onclick="generar(true)" class="btn-gold">Generar Maestro</button>
-    </div>
-
-    <div id="resultado" style="display: none;">
-        <div class="qr-frame">
-            <div id="qr-img"></div>
+<div class="luxury-card">
+    <div class="header-section">
+        <div class="header-logo">
+            <i class="fa-solid fa-shield-halved"></i>
         </div>
-        <p id="qr-msg"></p>
-        <button onclick="window.print()" class="btn-gold" style="font-size: 14px; padding: 12px; max-width: 200px;">
-            <i class="fa-solid fa-print"></i> Guardar
-        </button>
+        <h1 class="title-gold-raised">Residencial Canteras</h1>
+        <p class="subtitle-gold-soft">Sistema de Acceso Inteligente</p>
+    </div>
+
+    <div class="form-section">
+        <div class="pills-container">
+            <button class="pill-button active" onclick="switchTab('invitado')">
+                <i class="fa-solid fa-user-clock"></i> Invitado
+            </button>
+            <button class="pill-button" onclick="switchTab('admin')">
+                <i class="fa-solid fa-key"></i> Dueño
+            </button>
+        </div>
+
+        <div class="tab-content active" id="tab-invitado">
+            <label class="form-label">Número de Casa</label>
+            <input type="number" id="casaV" class="luxury-input" placeholder="Ej: 405">
+            <button onclick="generar(false)" class="btn-luxury">Generar Pase Único</button>
+        </div>
+
+        <div class="tab-content" id="tab-admin">
+            <label class="form-label">Casa</label>
+            <input type="number" id="casaA" class="luxury-input">
+            <label class="form-label">Usos</label>
+            <input type="number" id="usosA" class="luxury-input" value="1">
+            <label class="form-label">Tipo</label>
+            <select id="tipoA" class="luxury-input">
+                <option value="Permanente">Permanente (Residente)</option>
+                <option value="Temporal">Temporal (Multi-uso)</option>
+            </select>
+            <label class="form-label">PIN</label>
+            <input type="password" id="pinA" class="luxury-input" placeholder="****">
+            <button onclick="generar(true)" class="btn-luxury">Generar Maestro</button>
+        </div>
+
+        <div id="resultado" style="display: none;">
+            <div class="qr-frame">
+                <div id="qr-img"></div>
+            </div>
+            <p id="qr-msg"></p>
+            <button onclick="window.print()" class="btn-luxury" style="font-size: 14px; padding: 15px; max-width: 250px;">
+                <i class="fa-solid fa-print"></i> Guardar o Imprimir
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-    // Lógica para cambiar de pestaña neumórfica
+    // Lógica para cambiar de pestaña luxury
     function switchTab(tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.pill-button').forEach(el => el.classList.remove('active'));
@@ -243,7 +265,7 @@
         document.getElementById('resultado').style.display = 'none'; // Limpia el QR al cambiar
     }
 
-    // Lógica de generación (mismo principio técnico, nuevo diseño)
+    // Lógica de generación (mismo principio técnico)
     async function generar(isAdmin) {
         const casa = isAdmin ? document.getElementById('casaA').value : document.getElementById('casaV').value;
         const tipo = isAdmin ? document.getElementById('tipoA').value : "Temporal";
@@ -257,7 +279,7 @@
         const msg = document.getElementById('qr-msg');
 
         resDiv.style.display = 'block';
-        imgDiv.innerHTML = '<div style="color:#d4af37">Generando...</div>';
+        imgDiv.innerHTML = '<div style="color:#f4d081; font-weight:600;">Cifrando pase...</div>';
 
         let url = `/generar?casa=${casa}&tipo=${tipo}&usos=${usos}`;
         if(pin) url += `&pin=${pin}`;
@@ -268,10 +290,10 @@
         img.onload = () => {
             imgDiv.innerHTML = "";
             imgDiv.appendChild(img);
-            msg.innerText = `Pase generado con éxito`;
+            msg.innerText = `Pase VIP generado con éxito`;
         };
         img.onerror = () => {
-            imgDiv.innerHTML = '<p style="color:red; font-size:12px">PIN incorrecto o error.</p>';
+            imgDiv.innerHTML = '<p style="color:red; font-size:12px; font-weight:600;">Error: PIN incorrecto o problema de conexión.</p>';
             msg.innerText = "";
         };
     }
