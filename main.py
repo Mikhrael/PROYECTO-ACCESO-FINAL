@@ -6,19 +6,18 @@ from io import BytesIO
 import uuid
 from supabase import create_client
 from datetime import datetime, timedelta
-from passlib.context import CryptContext
 
 # --- CONFIGURACIÓN ---
 URL = "https://acvlmncnfayjrjitmspq.supabase.co"
-KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdmxtbmNuZmF5anJqaXRtc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MDgsImV4cCI6MjA4OTk2MDYwOH0.8wSohRdhtwO3Kg9hr3lLlcLSyfqKL73yk__q7BuHtZo" # Mantén tu key actual
+KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdmxtbmNuZmF5anJqaXRtc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MDgsImV4cCI6MjA4OTk2MDYwOH0.8wSohRdhtwO3Kg9hr3lLlcLSyfqKL73yk__q7BuHtZo"
 supabase = create_client(URL, KEY)
 
-# Configuración de seguridad para el PIN
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-# Este hash equivale al PIN "2306". Es más seguro que guardarlo en texto plano.
-PIN_MAESTRO_HASH = "$2b$12$K1rO0sN8H6zX5zX5zX5zXeuY7v6zX5zX5zX5zX5zX5zX5zX5zX5zX" 
+# Tu PIN para generar pases (Cámbialo si quieres otro)
+PIN_MAESTRO = "2306" 
 
 app = FastAPI()
+
+# Esto sirve para que Render encuentre tu index.html
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
@@ -27,38 +26,38 @@ def home():
 
 @app.get("/generar")
 def generar_qr(casa: str, tipo: str = "Temporal", usos: int = 1, pin: str = None):
-    # --- LIMPIEZA AUTOMÁTICA ---
+    # 1. Limpieza automática de pases viejos para que no se llene tu base de datos
     try:
-        # Borra pases temporales cuya fecha de expiración ya pasó
-        supabase.table("accesos").delete().lt("expira_at", datetime.utcnow().isoformat()).eq("tipo", "Temporal").execute()
+        ahora = datetime.utcnow().isoformat()
+        supabase.table("accesos").delete().lt("expira_at", ahora).eq("tipo", "Temporal").execute()
     except Exception as e:
         print(f"Error en limpieza: {e}")
 
-    # --- VALIDACIÓN DE PIN SEGURO ---
-    if tipo == "Permanente" or usos > 1:
-        if not pin or not pwd_context.verify(pin, PIN_MAESTRO_HASH):
+    # 2. Validación de PIN (Solo pide PIN si es Residente o tiene más de 1 uso)
+    if tipo == "Permanente" or int(usos) > 1:
+        if pin != PIN_MAESTRO:
             return Response(content="PIN Incorrecto", status_code=401)
 
-    # --- GENERACIÓN DE DATOS ---
+    # 3. Generación del Token y Expiración
     token = str(uuid.uuid4())[:8].upper()
     
-    # Expiración: 24h para temporales, 10 años para residentes
+    # 24 horas para invitados, 10 años para residentes
     horas = 24 if tipo == "Temporal" else 87600 
     expiracion = datetime.utcnow() + timedelta(hours=horas)
 
-    # --- GUARDADO EN BASE DE DATOS ---
+    # 4. Guardado en Supabase
     try:
         supabase.table("accesos").insert({
             "casa": casa, 
             "token": token, 
             "tipo": tipo, 
-            "usos_permitidos": usos,
-            "usos_restantes": usos,
+            "usos_permitidos": int(usos),
+            "usos_restantes": int(usos),
             "expira_at": expiracion.isoformat(),
             "usado": False
         }).execute()
 
-        # Generar imagen QR
+        # 5. Crear la imagen del QR
         img = qrcode.make(token)
         buf = BytesIO()
         img.save(buf, "PNG")
