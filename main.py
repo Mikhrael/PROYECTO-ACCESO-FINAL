@@ -12,7 +12,7 @@ URL = "https://acvlmncnfayjrjitmspq.supabase.co"
 KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFjdmxtbmNuZmF5anJqaXRtc3BxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzODQ2MDgsImV4cCI6MjA4OTk2MDYwOH0.8wSohRdhtwO3Kg9hr3lLlcLSyfqKL73yk__q7BuHtZo"
 supabase = create_client(URL, KEY)
 
-PIN_MAESTRO = "2306" 
+PIN_MAESTRO = "19728086" 
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
