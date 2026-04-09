@@ -29,10 +29,8 @@ def generar_qr(casa: str, tipo: str = "Temporal", usos: int = 1, pin: str = None
     except Exception as e:
         print(f"Error en limpieza: {e}")
 
-    # VALIDACIÓN CORREGIDA:
-    # Invitados (2 usos) pasan sin PIN. 
-    # Solo se pide PIN para "Permanente" o si alguien quiere poner más de 2 usos.
-    if tipo == "Permanente" or int(usos) > 2:
+    # VALIDACIÓN:
+    if tipo == "Permanente" or tipo == "ListaBlanca" or int(usos) > 2:
         if pin != PIN_MAESTRO:
             return Response(content="PIN Incorrecto", status_code=401)
 
@@ -60,3 +58,24 @@ def generar_qr(casa: str, tipo: str = "Temporal", usos: int = 1, pin: str = None
     except Exception as e:
         print(f"Error crítico: {e}")
         return Response(content=f"Error: {str(e)}", status_code=500)
+
+# --- NUEVA FUNCIÓN: ACTUALIZAR ESTATUS (LISTA NEGRA / PERDONAR) ---
+@app.get("/actualizar_estatus")
+def actualizar_estatus(casa: str, tipo: str, pin: str):
+    # 1. Validar el PIN Maestro
+    if pin != PIN_MAESTRO:
+        return Response(content="PIN de seguridad incorrecto", status_code=401)
+
+    try:
+        # 2. Actualizar en Supabase el campo 'tipo' buscando por el nombre de la 'casa'
+        # El .eq("casa", casa) buscará al residente que ya tiene ese nombre.
+        res = supabase.table("accesos").update({"tipo": tipo}).eq("casa", casa).execute()
+
+        if res.data:
+            return Response(content=f"Residente {casa} actualizado a {tipo}", status_code=200)
+        else:
+            return Response(content="No se encontró un residente con ese nombre", status_code=404)
+
+    except Exception as e:
+        print(f"Error al actualizar estatus: {e}")
+        return Response(content=f"Error en la base de datos: {str(e)}", status_code=500)
