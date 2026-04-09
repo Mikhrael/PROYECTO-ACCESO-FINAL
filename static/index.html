@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- ESTILOS BASE LUXURY (Mantenidos) --- */
+        /* --- ESTILOS BASE LUXURY --- */
         :root {
             --bg-dark: #121212;
             --bg-gold-metal: #a68b55;
@@ -34,7 +34,8 @@
 
         .form-label { display: block; color: var(--text-gold-dark); font-weight: 600; font-size: 13px; margin-bottom: 5px; padding-left: 10px; }
         .luxury-input { width: 100%; background-color: transparent; border: 1px solid var(--text-gold-dark); padding: 15px; border-radius: 15px; box-shadow: var(--shadow-metal-in); color: var(--text-gold-light); font-size: 15px; margin-bottom: 15px; }
-        .btn-luxury { width: 100%; background-color: #000; border: 2px solid var(--text-gold-dark); color: var(--text-gold-light); padding: 18px; border-radius: 18px; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-metal-raised); }
+        .btn-luxury { width: 100%; background-color: #000; border: 2px solid var(--text-gold-dark); color: var(--text-gold-light); padding: 18px; border-radius: 18px; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-metal-raised); transition: 0.3s; }
+        .btn-luxury:active { transform: scale(0.98); box-shadow: var(--shadow-metal-in); }
 
         #resultado { margin-top: 25px; border-top: 2px solid var(--text-gold-dark); padding-top: 20px; text-align: center; }
         .qr-frame { display: inline-block; background: white; padding: 15px; border-radius: 20px; margin-bottom: 15px; }
@@ -73,7 +74,7 @@
         </div>
 
         <div class="tab-content" id="tab-lista-blanca">
-            <p style="color: #000; font-size: 12px; margin-bottom: 10px; font-weight: bold;">Acceso permanente con registro de historial.</p>
+            <p style="color: #000; font-size: 11px; margin-bottom: 10px; font-weight: bold; text-align: center;">Acceso libre con registro de historial.</p>
             <label class="form-label">Nombre a Registrar</label>
             <input type="text" id="casaLB" class="luxury-input" placeholder="Proveedor VIP">
             <label class="form-label">PIN Seguridad</label>
@@ -82,16 +83,18 @@
         </div>
 
         <div class="tab-content" id="tab-lista-negra">
-            <p style="color: #600; font-size: 12px; margin-bottom: 10px; font-weight: bold;">Acceso con retraso forzado de 15 segundos.</p>
+            <p style="color: #600; font-size: 11px; margin-bottom: 10px; font-weight: bold; text-align: center;">Acceso restringido (retraso forzado 15s).</p>
             <label class="form-label">Nombre a Restringir</label>
             <input type="text" id="casaLN" class="luxury-input" placeholder="Nombre Restringido">
-            <button onclick="generar('ListaNegra', 1)" class="btn-luxury">Agregar a Lista Negra</button>
+            <label class="form-label">PIN Seguridad</label>
+            <input type="password" id="pinLN" class="luxury-input" placeholder="****">
+            <button onclick="generar('ListaNegra', 1, 'pinLN')" class="btn-luxury">Agregar a Lista Negra</button>
         </div>
 
         <div id="resultado" style="display: none;">
             <div class="qr-frame"><div id="qr-img"></div></div>
             <p id="qr-msg" style="color:#000; font-weight: bold;"></p>
-            <button onclick="location.reload()" class="btn-luxury" style="margin-top:10px; background:#444;">Nuevo Registro</button>
+            <button onclick="location.reload()" class="btn-luxury" style="margin-top:10px; background:#444; border-color: #666;">Nuevo Registro</button>
         </div>
     </div>
 </div>
@@ -107,6 +110,7 @@
 
     async function generar(tipo, usos, pinId = null) {
         let casa = "";
+        // Lógica para obtener el valor de identificación según la pestaña
         if(tipo === 'Temporal') casa = document.getElementById('casaV').value;
         if(tipo === 'Permanente') casa = document.getElementById('casaA').value;
         if(tipo === 'ListaBlanca') casa = document.getElementById('casaLB').value;
@@ -114,14 +118,16 @@
 
         const pin = pinId ? document.getElementById(pinId).value : "";
 
+        // Validaciones básicas
         if(!casa) return alert("Ingrese identificación");
-        if(pinId && !pin) return alert("PIN requerido");
+        if(pinId && !pin) return alert("Se requiere el PIN de seguridad para esta acción");
 
         const resDiv = document.getElementById('resultado');
         const imgDiv = document.getElementById('qr-img');
         resDiv.style.display = 'block';
         imgDiv.innerHTML = "Generando...";
 
+        // Construcción de la URL para el servidor Python
         let url = `/generar?casa=${encodeURIComponent(casa)}&tipo=${tipo}&usos=${usos}`;
         if(pin) url += `&pin=${pin}`;
 
@@ -134,7 +140,10 @@
             document.getElementById('qr-msg').innerText = "QR Generado: " + tipo;
             resDiv.scrollIntoView({ behavior: 'smooth' });
         };
-        img.onerror = () => alert("Error al generar (PIN incorrecto)");
+        img.onerror = () => {
+            resDiv.style.display = 'none';
+            alert("Error al generar: Verifique que el PIN sea correcto o que el servidor esté activo.");
+        };
     }
 </script>
 </body>
