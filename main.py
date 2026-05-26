@@ -8,7 +8,7 @@ from supabase import create_client
 from datetime import datetime, timedelta
 
 # --- CONFIGURACIÓN ---
-URL = "https://picbkvcjpqnfbdlufxdc.supabase.co"
+URL = "https://picbkvcjpqnfdlufxdc.api.supabase.co"
 KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpY2JrdmNqcHFuZmJkbHVmeGRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NDQ5MzIsImV4cCI6MjA5NTMyMDkzMn0.s3RwNHfh_cx8_ZC_oug0K3d9FLn0FwiuwOKks0JUebM"
 supabase = create_client(URL, KEY)
 
